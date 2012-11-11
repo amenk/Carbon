@@ -319,6 +319,12 @@ class DiffTest extends TestFixture
       $d = Carbon::now()->addSecond();
       $this->assertSame('1 second before', Carbon::now()->diffForHumans($d));
    }
+
+   public function testDiffForHumansOtherShort()
+    {
+        $d = Carbon::now()->addSecond();
+        $this->assertSame('1 s before', Carbon::now()->diffForHumans($d, true));
+   }
    public function testDiffForHumansOtherAndSeconds()
    {
       $d = Carbon::now()->addSeconds(2);

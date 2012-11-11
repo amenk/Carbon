@@ -666,7 +666,7 @@ class Carbon extends \DateTime
     * 1 hour after
     * 5 months after
     */
-   public function diffForHumans(Carbon $other = null)
+   public function diffForHumans(Carbon $other = null, $useShort = false)
    {
       $txt = '';
 
@@ -682,14 +682,14 @@ class Carbon extends \DateTime
 
       // 30 days per month, 365 days per year... good enough!!
       $divs = array(
-         'second' => self::SECONDS_PER_MINUTE,
-         'minute' => self::MINUTES_PER_HOUR,
-         'hour' => self::HOURS_PER_DAY,
-         'day' => 30,
-         'month' => 12
+         'second,s' => self::SECONDS_PER_MINUTE,
+         'minute,m' => self::MINUTES_PER_HOUR,
+         'hour,hr' => self::HOURS_PER_DAY,
+         'day,d' => 30,
+         'month,month' => 12
       );
 
-      $unit = 'year';
+      $unit = 'year,y';
 
       foreach ($divs as $divUnit => $divValue) {
          if ($delta < $divValue) {
@@ -700,12 +700,19 @@ class Carbon extends \DateTime
          $delta = floor($delta / $divValue);
       }
 
+      list($long, $short) = explode(',', $unit);
+      $unit = ($useShort ? $short : $long);
+
+
       if ($delta == 0) {
          $delta = 1;
       }
 
       $txt = $delta . ' ' . $unit;
-      $txt .= $delta == 1 ? '' : 's';
+
+      if(!$useShort) {
+         $txt .= $delta == 1 ? '' : 's';
+      }
 
       if ($isNow) {
          if ($isFuture) {
